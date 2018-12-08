@@ -30,5 +30,8 @@ with open(openPath, newline='',encoding="utf8") as electionData:
         Li = candidates.count("Li")
         OTooley = candidates.count("O'Tooley")
 
+    for month in 
+
+
 print("Total Votes: " + str(totalVotes))
 print(Khan, Correy, Li, OTooley )

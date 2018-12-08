@@ -4,71 +4,92 @@
 # import os and csv modules
 import os
 import csv
+import pandas as pd
 
 # Call budget_data.csv
 openPath = os.path.join('..', '..', 'NUCHI201811DATA2', 'Homework', '03-Python', 'Instructions', 'PyBank', 'Resources', 'budget_data.csv')
-
 totalMonths = 0
-totalNet = 0
-profit_loss = [] #back index....
-monthlyChange = []
-averageprofit_loss = 0
-
+netTotal = 0
+budget_df = pd.read_csv(openPath, encoding="ISO-8859-1")
 
 # open budgetData csv
 with open(openPath, newline='',encoding="utf8") as budgetData:
     
-    # go past header
+    # Go past header
+    # Separate budgetData file into columns
     next(budgetData)
-
-    # separate budgetData by commas
     reader = csv.reader(budgetData, delimiter=',')
 
-    # loop through
     for row in reader:
 
-        # The total number of months
-        # included in the dataset after header
+        # Count of all months 
         totalMonths += 1
         
-        # calculate total net of profits/losses
-        # total net = total net + row[1]
-        totalNet += int(row[1])
+        # Cast row[1] as integers and save in variable
+        Profits_Losses = int(row[1])
 
-        # Average change in Profit/Losses between months
-        # over entire period
-        profit_loss.append(int(row[1]))
-        
-    # loop through profit_loss list 
-    len(profit_loss)
+        # Calculate net of profits/losses
+        netTotal += Profits_Losses
 
-    for month in profit_loss:
+# Begin calculating monthly change
+# Within df, cast 'Profit/Losses' column as numbers
+pd.to_numeric(budget_df['Profit/Losses'])
 
-        #Feb - Jan etc month to month change
-        monthlyChange = 
-        # monthlyChange += (next(month) - month[month-1])
+# Create new column for Monthly Change
+# Subtract the previous month from the next month revenue
+budget_df['Monthly Change'] = (budget_df['Profit/Losses'].shift(-1) - budget_df['Profit/Losses'])
 
-print(monthlyChange)
+# Shift cells up by one, so monthly change starts with Jan 2010 to Feb 2010
+budget_df['Monthly Change'] = budget_df['Monthly Change'].shift(1)
 
-        
-        
+# Average monthly change is the sum of month to month changes
+# divided by the length of the df - 1
+net_change = budget_df['Monthly Change'].sum()
+avg_mnthly_chng = net_change / (len(budget_df)-1)
+
+# Set df index to 'Monthly Change'
+budget_df_dateind = budget_df.set_index("Monthly Change")
+
+# Greatest Increase in Profits
+max_profit = budget_df["Monthly Change"].max()
+max_profit_date = budget_df_dateind.loc[max_profit,"Date"]
+
+# Greatest decrease in Profits
+max_loss = budget_df["Monthly Change"].min()
+max_loss_date = budget_df_dateind.loc[max_loss, "Date"]
 
 
+print("Financial Analysis")
+print("------------------------------")
 
-# print("Total Months: " + str(totalMonths))
-# print("Total Net: "+ str(totalNet))
+print(f"Total Months: {totalMonths}")
+print(f"Total Net: {netTotal}")
+print(f"Average_change {avg_mnthly_chng}")
 
+print(f"Average Change: ${avg_mnthly_chng}")
+print(f"Greateest Increase in Profits: {max_profit_date}")
+print(f"Greatest Decrease in Profits: {max_loss_date}")
 
+# Create output_pybank.txt file of analysis 
+output = open("output_pybank.txt", "w")
 
+analysis = ["Financial Analysis \n", 
+    "------------------------------\n", 
+    f"Total Months: {totalMonths}\n",
+    f"Total Net: {netTotal}\n",
+    f"Average_change {avg_mnthly_chng}\n",
+    f"Greateest Increase in Profits: {max_profit_date}\n",
+    f"Greatest Decrease in Profits: {max_loss_date}\n"]
 
-# The total net amount of "Profit/Losses" over
-#  the entire period
+# Write analysis and close file
+output.writelines(analysis)
+output.close()
+   
 
-# The average change in "Profit/Losses" between
-#  months over the entire period
+# Total net amount of "Profit/Losses"
 
-# The greatest increase in profits (date and amount)
-#  over the entire period
+# Average change in "Profit/Losses" between months
 
-# The greatest decrease in losses (date and amount)
-#  over the entire period
+# Greatest increase in profits (date and amount)
+
+# Greatest decrease in losses (date and amount)
