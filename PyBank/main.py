@@ -66,9 +66,8 @@ print(f"Total Months: {totalMonths}")
 print(f"Total Net: {netTotal}")
 print(f"Average_change {avg_mnthly_chng}")
 
-print(f"Average Change: ${avg_mnthly_chng}")
-print(f"Greateest Increase in Profits: {max_profit_date}")
-print(f"Greatest Decrease in Profits: {max_loss_date}")
+print(f"Greateest Increase in Profits: {max_profit_date} (${max_profit})")
+print(f"Greatest Decrease in Profits: {max_loss_date} (${max_loss})")
 
 # Create output_pybank.txt file of analysis 
 output = open("output_pybank.txt", "w")
@@ -78,8 +77,8 @@ analysis = ["Financial Analysis \n",
     f"Total Months: {totalMonths}\n",
     f"Total Net: {netTotal}\n",
     f"Average_change {avg_mnthly_chng}\n",
-    f"Greateest Increase in Profits: {max_profit_date}\n",
-    f"Greatest Decrease in Profits: {max_loss_date}\n"]
+    f"Greateest Increase in Profits: {max_profit_date} (${max_profit})\n",
+    f"Greatest Decrease in Profits: {max_loss_date} (${max_loss})\n"]
 
 # Write analysis and close file
 output.writelines(analysis)
