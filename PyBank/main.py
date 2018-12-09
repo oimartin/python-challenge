@@ -84,11 +84,4 @@ analysis = ["Financial Analysis \n",
 output.writelines(analysis)
 output.close()
    
-
-# Total net amount of "Profit/Losses"
-
-# Average change in "Profit/Losses" between months
-
-# Greatest increase in profits (date and amount)
-
-# Greatest decrease in losses (date and amount)
+    
